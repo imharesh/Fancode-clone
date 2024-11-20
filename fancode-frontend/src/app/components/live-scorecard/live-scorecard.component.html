@@ -1,0 +1,98 @@
+<div class="live-scorecard">
+  <!-- Match Header -->
+  <div class="match-header">
+    <div class="team team1">
+      <h3>{{ currentInnings === 1 ? team1Score.runs : team1Score.runs }}/{{ currentInnings === 1 ? team1Score.wickets : team1Score.wickets }}</h3>
+      <p class="overs">({{ currentInnings === 1 ? team1Score.overs : team1Score.overs }} ov)</p>
+    </div>
+    <div class="match-status">
+      <span class="vs">VS</span>
+      <span class="current-innings">{{ currentInnings }}st Innings</span>
+    </div>
+    <div class="team team2">
+      <h3>{{ currentInnings === 2 ? team2Score.runs : 'Yet to bat' }}/{{ currentInnings === 2 ? team2Score.wickets : '0' }}</h3>
+      <p class="overs" *ngIf="currentInnings === 2">({{ team2Score.overs }} ov)</p>
+    </div>
+  </div>
+
+  <!-- Current Partnership -->
+  <div class="partnership-info">
+    <h4>Partnership: {{ partnership.runs }} ({{ partnership.balls }} balls)</h4>
+  </div>
+
+  <!-- Required Run Rate -->
+  <div class="required-rate" *ngIf="currentInnings === 2">
+    <div class="rate-item">
+      <label>Required Rate</label>
+      <span>{{ requiredRunRate | number:'1.2-2' }}</span>
+    </div>
+    <div class="rate-item">
+      <label>Projected Score</label>
+      <span>{{ projectedScore | number:'1.0-0' }}</span>
+    </div>
+  </div>
+
+  <!-- Batting Stats -->
+  <div class="batting-stats">
+    <h4>Batting</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Batsman</th>
+          <th>R</th>
+          <th>B</th>
+          <th>4s</th>
+          <th>6s</th>
+          <th>SR</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let batsman of battingStats" [class.striker]="batsman.name === currentBatsmen.striker">
+          <td>{{ batsman.name }}{{ batsman.name === currentBatsmen.striker ? '*' : '' }}</td>
+          <td>{{ batsman.runs }}</td>
+          <td>{{ batsman.balls }}</td>
+          <td>{{ batsman.fours }}</td>
+          <td>{{ batsman.sixes }}</td>
+          <td>{{ batsman.strikeRate | number:'1.2-2' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Bowling Stats -->
+  <div class="bowling-stats">
+    <h4>Bowling</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Bowler</th>
+          <th>O</th>
+          <th>M</th>
+          <th>R</th>
+          <th>W</th>
+          <th>Econ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let bowler of bowlingStats" [class.current-bowler]="bowler.name === currentBowler">
+          <td>{{ bowler.name }}</td>
+          <td>{{ bowler.overs }}</td>
+          <td>{{ bowler.maidens }}</td>
+          <td>{{ bowler.runs }}</td>
+          <td>{{ bowler.wickets }}</td>
+          <td>{{ bowler.economy | number:'1.2-2' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Recent Balls -->
+  <div class="recent-balls">
+    <h4>Recent Balls</h4>
+    <div class="ball-by-ball">
+      <div *ngFor="let ball of recentBalls" class="ball" [ngClass]="{'wicket': ball.isWicket}">
+        {{ ball.runs === 0 ? (ball.isWicket ? 'W' : '0') : ball.runs }}
+      </div>
+    </div>
+  </div>
+</div>

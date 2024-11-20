@@ -1,0 +1,210 @@
+<div class="hero-section">
+  <div class="overlay"></div>
+  <div class="content">
+    <h1>Welcome to <span>FanCode</span></h1>
+    <p>Your ultimate destination for live cricket scores, matches, and highlights</p>
+    <div class="cta-buttons">
+      <button class="btn btn-primary me-3" routerLink="/matches">
+        <i class="fas fa-play me-2"></i>Live Matches
+      </button>
+      <button class="btn btn-secondary" routerLink="/highlights">
+        <i class="fas fa-film me-2"></i>Watch Highlights
+      </button>
+    </div>
+  </div>
+</div>
+
+<section class="match-categories">
+  <div class="container">
+    <div class="section-header">
+      <h2>Match Categories</h2>
+      <p>Explore different formats of cricket</p>
+    </div>
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="category-card t20">
+          <div class="icon"><i class="fas fa-bolt"></i></div>
+          <h3>T20 Matches</h3>
+          <p>Fast-paced action packed cricket</p>
+          <div class="stats">
+            <div class="stat">
+              <span class="value">4</span>
+              <span class="label">Live</span>
+            </div>
+            <div class="stat">
+              <span class="value">12</span>
+              <span class="label">Today</span>
+            </div>
+          </div>
+          <a routerLink="/matches" class="btn btn-outline-light">View Matches</a>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="category-card odi">
+          <div class="icon"><i class="fas fa-cricket-ball"></i></div>
+          <h3>ODI Series</h3>
+          <p>One Day International matches</p>
+          <div class="stats">
+            <div class="stat">
+              <span class="value">2</span>
+              <span class="label">Live</span>
+            </div>
+            <div class="stat">
+              <span class="value">6</span>
+              <span class="label">Today</span>
+            </div>
+          </div>
+          <a routerLink="/matches" class="btn btn-outline-light">View Matches</a>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="category-card test">
+          <div class="icon"><i class="fas fa-shield-alt"></i></div>
+          <h3>Test Cricket</h3>
+          <p>The ultimate test of cricket</p>
+          <div class="stats">
+            <div class="stat">
+              <span class="value">3</span>
+              <span class="label">Live</span>
+            </div>
+            <div class="stat">
+              <span class="value">4</span>
+              <span class="label">Today</span>
+            </div>
+          </div>
+          <a routerLink="/matches" class="btn btn-outline-light">View Matches</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="leagues">
+  <div class="container">
+    <div class="section-header">
+      <h2>Popular Leagues</h2>
+      <p>Top cricket leagues around the world</p>
+    </div>
+    <div class="leagues-scroll">
+      <div class="league-cards">
+        <div class="league-card" *ngFor="let league of leagues" [style.background]="'linear-gradient(135deg, ' + league.theme + '20, ' + league.theme + '40)'">
+          <div class="league-banner">
+            <img [src]="league.logo" [alt]="league.name" class="banner-img">
+            <div class="overlay" [style.background]="'linear-gradient(0deg, ' + league.theme + 'cc, transparent)'"></div>
+          </div>
+          <div class="league-info" [style.color]="league.theme">
+            <h3>{{league.name}}</h3>
+            <div class="league-stats">
+              <span class="stat">
+                <i class="fas fa-cricket-ball"></i>
+                {{league.matches}} Matches
+              </span>
+              <span class="stat">
+                <i class="fas fa-users"></i>
+                {{league.teams}} Teams
+              </span>
+            </div>
+            <div class="league-country">
+              <i class="fas fa-globe-asia"></i>
+              {{league.country}}
+            </div>
+          </div>
+          <a [routerLink]="['/leagues', league.id]" class="btn btn-primary" [style.background]="league.theme">View League</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="live-matches-section">
+  <div class="section-header">
+    <h2>Live Matches</h2>
+    <div class="filter-buttons">
+      <button><fa-icon [icon]="faSearch"></fa-icon></button>
+      <button><fa-icon [icon]="faFilter"></fa-icon></button>
+    </div>
+  </div>
+
+  <div class="matches-container">
+    <div *ngFor="let match of liveMatches" class="match-card">
+      <div class="venue-info">
+        <span class="venue">{{ match.venue }}</span>
+        <span class="live-badge">LIVE</span>
+      </div>
+
+      <div class="teams-container">
+        <div class="team">
+          <div class="team-name">{{ match.team1.name }}</div>
+          <div class="team-score">
+            <span class="runs">{{ match.team1.score }}/{{ match.team1.wickets }}</span>
+            <span class="overs">({{ getOversString(match.team1.overs) }})</span>
+            <span class="run-rate">CRR: {{ getRunRate(match.team1.score, match.team1.overs) }}</span>
+          </div>
+        </div>
+
+        <div class="team">
+          <div class="team-name">{{ match.team2.name }}</div>
+          <div class="team-score" *ngIf="match.team2.overs > 0">
+            <span class="runs">{{ match.team2.score }}/{{ match.team2.wickets }}</span>
+            <span class="overs">({{ getOversString(match.team2.overs) }})</span>
+            <span class="run-rate">CRR: {{ getRunRate(match.team2.score, match.team2.overs) }}</span>
+          </div>
+          <div class="team-score" *ngIf="match.team2.overs === 0">
+            <span>Yet to bat</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="match-info">
+        <div class="batsmen">
+          <div class="batsman striker">
+            <span class="name">{{ match.currentBatsmen.striker.name }}*</span>
+            <span class="stats">{{ match.currentBatsmen.striker.runs }}({{ match.currentBatsmen.striker.balls }})</span>
+          </div>
+          <div class="batsman">
+            <span class="name">{{ match.currentBatsmen.nonStriker.name }}</span>
+            <span class="stats">{{ match.currentBatsmen.nonStriker.runs }}({{ match.currentBatsmen.nonStriker.balls }})</span>
+          </div>
+        </div>
+
+        <div class="bowler">
+          <span class="name">{{ match.currentBowler.name }}</span>
+          <span class="stats">{{ match.currentBowler.wickets }}/{{ match.currentBowler.runs }} ({{ getOversString(match.currentBowler.overs) }})</span>
+        </div>
+
+        <div class="recent-balls">
+          <span class="label">Last over:</span>
+          <div class="balls">
+            <span *ngFor="let ball of match.recentBalls" 
+                  class="ball"
+                  [ngClass]="{
+                    'wicket': ball === 'W',
+                    'boundary': ball === '4' || ball === '6'
+                  }">
+              {{ ball }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="live-scores-section">
+  <div class="section-header">
+    <h2>Live Scores</h2>
+    <div class="filter-buttons">
+      <button><fa-icon [icon]="faSearch"></fa-icon></button>
+      <button><fa-icon [icon]="faFilter"></fa-icon></button>
+    </div>
+  </div>
+
+  <div class="live-match-section" *ngIf="currentMatch">
+    <div class="match-status" [ngClass]="currentMatch.status">
+      <span *ngIf="currentMatch.status === 'upcoming'">{{ countdownTimer }}</span>
+      <span *ngIf="currentMatch.status === 'live'" class="live-indicator">LIVE</span>
+      <span *ngIf="currentMatch.status === 'completed'">COMPLETED</span>
+    </div>
+    <app-live-scorecard *ngIf="currentMatch.status === 'live'"></app-live-scorecard>
+  </div>
+</section>
